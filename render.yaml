@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: schedule-map-maker
+    runtime: rust
+    plan: free
+    buildCommand: cargo build --release
+    startCommand: cargo run --release
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: RUST_LOG
+        value: info

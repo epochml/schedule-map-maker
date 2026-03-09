@@ -1,17 +1,18 @@
 use actix_files::Files;
-use actix_web::web::{self, ServiceConfig};
-use log::error;
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use log::{error, info};
 use serde::{Deserialize, Serialize};
 use serde_json::from_reader;
-use shuttle_actix_web::ShuttleActixWeb;
-use std::path::Path;
+use std::{env, path::Path};
+
 mod path;
 mod webpages;
+
 use webpages::{
-    about, css_handler, directions, editor, home_page, image, input, save, schedule_handle,
+    about, css_handler, directions, editor, find_room, find_room_loc, home_page, image, input,
+    save, schedule_handle,
 };
 
-use crate::webpages::{find_room, find_room_loc};
 #[derive(Debug, Deserialize, Serialize, Clone)]
 struct Node {
     x: f64,
@@ -43,6 +44,7 @@ mod pathfinding {
     pub fn time_path(start_id: usize, end_id: usize, nodes: &mut [Node]) -> Vec<usize> {
         initialize_nodes(nodes, start_id);
         let mut unvisited_nodes: Vec<usize> = (0..nodes.len()).collect();
+
         while let Some(current_index) = unvisited_nodes
             .iter()
             .min_by(|&&a, &&b| nodes[a].dist.partial_cmp(&nodes[b].dist).unwrap())
@@ -112,16 +114,15 @@ fn name_to_id(name: &str, nodes: &[Node]) -> Result<usize, String> {
         .map(|node| node.id)
         .ok_or_else(|| {
             error!("Could not identify a node for string '{name}'");
-            format!("Could not identify a node for string '{name}'").to_string()
+            format!("Could not identify a node for string '{name}'")
         })
 }
+
 fn name_to_ids<'a>(name: &str, nodes: &'a [Node]) -> Vec<&'a Node> {
-    let res = nodes
+    nodes
         .iter()
         .filter(|node| node.name.to_lowercase() == name.to_lowercase())
-        .collect();
-
-    res
+        .collect()
 }
 
 fn closest_pair_between(
@@ -146,25 +147,43 @@ fn closest_pair_between(
         .map(|(_, sid, eid)| (sid, eid))
 }
 
-#[shuttle_runtime::main]
-async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
-    let config = move |cfg: &mut web::ServiceConfig| {
-        cfg.service(
-            web::scope("")
-                .route("/", web::get().to(input))
-                .route("/editor", web::get().to(editor))
-                .route("/image", web::get().to(image))
-                .route("/home.css", web::get().to(css_handler))
-                .route("/save", web::post().to(save))
-                .route("/get_directions", web::post().to(directions))
-                .route("/schedule-post", web::post().to(schedule_handle))
-                .route("/path", web::get().to(home_page))
-                .route("/about", web::get().to(about))
-                .route("/room", web::get().to(find_room))
-                .route("/find_room_loc", web::post().to(find_room_loc))
-                .service(Files::new("/assets", "assets")),
-        );
-    };
+async fn healthz() -> impl Responder {
+    HttpResponse::Ok().body("ok")
+}
 
-    Ok(config.into())
+fn configure_routes(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("")
+            .route("/", web::get().to(input))
+            .route("/editor", web::get().to(editor))
+            .route("/image", web::get().to(image))
+            .route("/home.css", web::get().to(css_handler))
+            .route("/save", web::post().to(save))
+            .route("/get_directions", web::post().to(directions))
+            .route("/schedule-post", web::post().to(schedule_handle))
+            .route("/path", web::get().to(home_page))
+            .route("/about", web::get().to(about))
+            .route("/room", web::get().to(find_room))
+            .route("/find_room_loc", web::post().to(find_room_loc))
+            .route("/healthz", web::get().to(healthz))
+            .service(Files::new("/assets", "assets")),
+    );
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    env_logger::init();
+
+    let host = env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
+    let port = env::var("PORT")
+        .ok()
+        .and_then(|value| value.parse::<u16>().ok())
+        .unwrap_or(10000);
+
+    info!("Starting Schedule Map Maker on http://{host}:{port}");
+
+    HttpServer::new(|| App::new().configure(configure_routes))
+        .bind((host.as_str(), port))?
+        .run()
+        .await
 }
