@@ -16,7 +16,7 @@ Then open `http://localhost:8000`.
 This app is configured to run as a project site at:
 
 ```text
-https://1337isnot1337.github.io/schedule-map-maker/
+https://epochml.github.io/schedule-map-maker/
 ```
 
 The included `.github/workflows/pages.yml` workflow builds `dist/` and deploys

@@ -435,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function buildReportUrl(title, body) {
     const params = new URLSearchParams({ title, body });
-    return `https://github.com/1337isnot1337/schedule-map-maker/issues/new?${params.toString()}`;
+    return `https://github.com/epochml/schedule-map-maker/issues/new?${params.toString()}`;
   }
 
   function smoothPath(points, radius) {
