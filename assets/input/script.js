@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     });
-    function arrowFetch() {
+    async function arrowFetch() {
         applyTransform();
         const scheduleInput = document.getElementById('scheduleInput').value;
         const selectedDay = document.getElementById('daySelector').value;
@@ -459,13 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const exit = document.getElementById('exitSelector').value;
         const checkbox = document.getElementById('midday');
         const isChecked = checkbox.checked;
-        fetch("/schedule-post", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "Schedule Input": scheduleInput, "Enter": enter, "Exit": exit, "LexMidday": isChecked }),
-        })
-            .then((data) => data.json())
-            .then((json) => {
+        try {
+                const json = await window.ScheduleMapEngine.generateSchedule(scheduleInput, enter, exit, isChecked);
                 console.log("Here is the json recieved: ", json);
                 if (json.status == 1) {
                     document.getElementById('error_message').innerHTML = `There was an error: ${json.error_message}. Hint: checking the <a id="error_message_link" href="/about">About Page</a> might help you`;
@@ -477,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 svg.innerHTML = '';
                 arrows.length = 0;
 
-                const curday = final_json[selectedDay];
+                const curday = final_json[selectedDay] || [];
                 const segmentMap = new Map();
                 const offsetSpacing = 3; // pixels
 
@@ -574,7 +569,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 //document.getElementById('map').style.height = '100%';
                 //this seems to be confusing ppl, will be removing for now.
                 //if added in future use toggleMinimize() to do it also
-            })
+        } catch (err) {
+            document.getElementById('error_message').innerHTML = `There was an error: ${err.message}. Hint: checking the <a id="error_message_link" href="/about">About Page</a> might help you`;
+        }
 
     }
 

@@ -1,25 +1,22 @@
 # schedule-map-maker
 
-## Building
+Static IMSA schedule map generator. Schedule parsing, room lookup, and path generation run in the browser against static assets.
 
-Install Rust
-
-% TODO
-
-Install Shuttle CLI:
+## Local Static Build
 
 ```bash
-cargo install cargo-shuttle
+npm run build
+npm run serve
 ```
 
-Build:
+Then open `http://localhost:8000`.
+
+## Tests
 
 ```bash
-cargo build
+npm test
 ```
 
-Run:
+## Legacy Rust Server
 
-```bash
-shuttle run
-```
+The Actix/Rust server is still present for reference, but the app no longer requires dynamic routes for normal use.

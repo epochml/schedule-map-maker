@@ -109,17 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const save_nodes = () => {
-    const formData = new FormData();
-    const file = new Blob([JSON.stringify(nodes_array)], { type: "application/json" });
-    formData.append("file", file, "nodes.json");
-
-    fetch("/save", {
-      method: "POST",
-      body: formData
-    })
-      .then(response => response.json())
-      .then(json => console.log(json))
-      .catch(err => console.error("Upload error:", err));
+    const file = new Blob([JSON.stringify(nodes_array, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(file);
+    link.download = "nodes.json";
+    link.click();
+    URL.revokeObjectURL(link.href);
   }
 
 

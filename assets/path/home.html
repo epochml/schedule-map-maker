@@ -16,84 +16,75 @@
 
 
   <link rel="stylesheet" href="/assets/home.css">
+  <script src="/assets/js/map-engine.js" defer></script>
+  <script src="/assets/js/room-combobox.js" defer></script>
   <script src="/assets/path/script.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 </head>
 
-<body>
-  <div style="height: 90%" class="map" id="map">
-    <img id="hallwayImage" class="hallway" src="/image" alt="Hallway Image">
-    <svg id="mySvg" viewBox="0 0 10000 27360"></svg>
+<body class="schedule-app tool-page">
+  <header class="app-topbar">
+    <div class="app-title">
+      <span class="app-name">Direct Path Finder</span>
+      <span id="importStatus" class="app-status">Awaiting route</span>
+    </div>
+    <nav class="app-nav" aria-label="Site navigation">
+      <a title="Map your full IMSA schedule" href="/">Map your schedule</a>
+      <a title="Find the shortest path between two rooms" rel="noopener noreferrer" href="/path">Room-to-room path</a>
+      <a title="Find one room on the map" rel="noopener noreferrer" href="/room">Find a room</a>
+      <a title="Read about Schedule Map Maker" rel="noopener noreferrer" href="/about">About</a>
+    </nav>
+  </header>
+
+  <div class="view-buttons">
+    <button title="Download an image of this path" id="downloadMapBtn" type="button">Save</button>
+    <button title="Hide the route panel" id="viewTog" type="button">Hide Panel</button>
+    <button title="Fit the current route in view" id="fitView" type="button">Fit</button>
+    <button title="Zoom in" id="zoomIn" type="button">+</button>
+    <button title="Zoom out" id="zoomOut" type="button">-</button>
   </div>
 
-  <div id="bottom-part" class="input_response">
-
-    <div id="maindiv" style="padding-top: 20px;">
-      <input id="start" type="text" style="color: white" placeholder="Enter Starting location" class="dark-input">
-      <input id="end" type="text" style="color: white" placeholder="Enter Destination" class="dark-input">
-      <div><button style="font-size: medium; width: 200px;" class="path_button dark-input">
-          Find Shortest Path
-        </button></div>
-
-
+  <div class="map" id="map" style="overflow: hidden;">
+    <div id="panzoom-container">
+      <img id="hallwayImage" class="hallway" src="/assets/imsa_hallway.jpg" alt="Hallway Image">
+      <svg id="mySvg"></svg>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="message_box">
-      <p id="message">Awaiting Input.</p>
-    </div>
-    <br>
+  </div>
 
+  <div id="bottom-part" class="workflow-panel tool-panel">
+    <form id="pathForm" class="tool-form">
+      <section class="render-section" aria-label="Path controls">
+        <div class="section-heading">
+          <div>
+            <p class="panel-kicker">Point to Point</p>
+            <h1>Find Shortest Path</h1>
+          </div>
+          <button class="button primary-button path_button" title="Find the shortest route between the selected locations" type="submit">Find Path</button>
+        </div>
 
-    <div style="display: flex; justify-content: center;">
-      <div style="display: flex; align-items: center; gap: 20px; overflow: hidden; position: fixed; bottom: 0;">
-        <p>
+        <div id="maindiv" class="settings-grid tool-settings path-settings">
+          <label class="field-label room-combobox" for="start">Start
+            <span class="field-action-row">
+              <input id="start" title="Type or choose the starting room or location" type="text" placeholder="Choose starting location" autocomplete="off">
+              <button id="favoriteStart" class="favorite-room-btn" title="Add or remove this start location from favorites" type="button" aria-label="Favorite start location">Fav</button>
+            </span>
+            <div id="startMenu" class="room-combobox-list" title="Matching starting locations" role="listbox" hidden></div>
+          </label>
+          <button id="swapRooms" class="swap-route-btn" title="Swap start and destination" type="button" aria-label="Swap start and destination">Swap</button>
+          <label class="field-label room-combobox" for="end">Destination
+            <span class="field-action-row">
+              <input id="end" title="Type or choose the destination room or location" type="text" placeholder="Choose destination" autocomplete="off">
+              <button id="favoriteEnd" class="favorite-room-btn" title="Add or remove this destination from favorites" type="button" aria-label="Favorite destination">Fav</button>
+            </span>
+            <div id="endMenu" class="room-combobox-list" title="Matching destination locations" role="listbox" hidden></div>
+          </label>
+        </div>
 
-
-          <a href="/">Schedule Finder ></a>
-          <a rel="noopener noreferrer" href="/about">About Page ></a>
-          <a rel="noopener noreferrer" href="/path">Direct Path ></a>
-          <a rel="noopener noreferrer" href="/room">Room Find Page ></a>
-          <a rel="noopener noreferrer" href="https://geosir.github.io/imsa-scheduler/">George's
-            Schedule Machine >></a>
-        </p>
-      </div>
-    </div>
-
-
+        <p id="message" class="tool-message" role="status">Choose a start and destination, then find the path.</p>
+        <a id="reportIssueLink" class="report-link" title="Report a bad room or route on GitHub" target="_blank" rel="noopener noreferrer" hidden>Report map issue</a>
+      </section>
+    </form>
   </div>
 </body>
-<script>
-  window.addEventListener("load", () => {
-    const map = document.getElementById("map");
-    const scrollHeight = map.scrollHeight - map.clientHeight;
-    map.scrollTop = scrollHeight * 0.15;
-  });
-
-  function saveToStorage(id, value) {
-    localStorage.setItem(id, value);
-  }
-
-  function loadFromStorage(id) {
-    return localStorage.getItem(id);
-  }
-
-  const elementsToPersist = ["start", "end"];
-
-  window.addEventListener("DOMContentLoaded", () => {
-    elementsToPersist.forEach(id => {
-      const el = document.getElementById(id);
-      const saved = loadFromStorage(id);
-      if (saved !== null) {
-        el.value = saved;
-      }
-
-      el.addEventListener("input", () => saveToStorage(id, el.value));
-      el.addEventListener("change", () => saveToStorage(id, el.value));
-    });
-  });
-</script>
 
 </html>

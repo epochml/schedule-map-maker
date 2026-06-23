@@ -1,193 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favico/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favico/favicon-16x16.png">
-    <link rel="manifest" href="/assets/favico/site.webmanifest">
-    <title>About This Site</title>
-    <link rel="stylesheet" href="/home.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <meta property="og:title" content="IMSA Schedule Map Maker" />
-    <meta property="og:description"
-        content="This website will generate a map of your IMSA schedule to ease navigation" />
-    <meta property="og:image" content="https://schedule-map-maker.epochml.org/assets/about/epochLogo.jpg" />
-    <meta property="og:url" content="https://schedule-map-maker.epochml.org/" />
-    <meta property="og:type" content="website" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favico/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favico/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favico/favicon-16x16.png">
+  <link rel="manifest" href="/assets/favico/site.webmanifest">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Schedule Map Maker</title>
+  <link rel="stylesheet" href="/assets/home.css">
+  <meta property="og:title" content="IMSA Schedule Map Maker" />
+  <meta property="og:description" content="This website will generate a map of your IMSA schedule to ease navigation" />
+  <meta property="og:image" content="https://schedule-map-maker.epochml.org/assets/about/epochLogo.jpg" />
+  <meta property="og:url" content="https://schedule-map-maker.epochml.org/" />
+  <meta property="og:type" content="website" />
 </head>
 
-<body style="background-color: #1E201E; " ;>
-    <div style="color: white; padding-left: 25%; padding-right: 25%">
-
-        <div
-            style="display: flex; justify-content: space-between; align-items: center; width: 100%; justify-items: end;">
-            <h2 style="width: max-content;">About/Help Page</h2>
-            <a href="https://epochml.org/"
-                style="width: 100px; display: flex; padding: 0px; justify-content: flex-end;"><img
-                    src="/assets/about/epochLogo.jpg" width="100%"
-                    style=" object-fit: contain;justify-self: flex-end;"></a>
-        </div>
-
-
-        <p>
-            Hello! This is the about/help page for the schedule map generator site.
-
-            The inspiration for this website came from the IMSA Code Society's
-            original basic path finder, where you input two places and it generates
-            a path between the two. This project builds on that basic idea by having one
-            input their schedule and have the path be auto-generated. This website is a project of IMSA's EPOCH, the
-            leading club for computer science here. More information can be found at <a style="padding-right:0px"
-                target="_blank" rel="noopener noreferrer" href="https://epochml.org/">EPOCH's website</a>.
-
-            The GitHub repository for this project can be found <a style="padding-right: 0px" target="_blank"
-                rel="noopener noreferrer" href="https://github.com/1337isnot1337/ClassroomFinder-rust">here</a>. The
-            GitHub repository for
-            IMSA Code Society's original work is <a style="padding-right: 0px;" target="_blank"
-                rel="noopener noreferrer" href="https://github.com/IMSA-Code-Society/ClassroomFinder">here</a>.
-
-
-
-        </p>
-        <div>
-            <details>
-                <summary>
-                    Project Details
-                </summary>
-                <div style="font-size: medium;">
-                    The backend for this site is written in Rust. It is hosted with <a style="padding-right:0px"
-                        target="_blank" rel="noopener noreferrer" href="https://www.shuttle.dev/">Shuttle.dev</a>.
-                    The frontend is only Javascript used to generate the schedule path. No information is stored by the
-                    server.
-                </div>
-            </details>
-
-            <details>
-                <summary>
-                    How to Use Schedule Map Maker
-                </summary>
-                <div style="font-size: medium;">
-                    The <a style="padding-right:0px" target="_blank" rel="noopener noreferrer" href="/">Schedule Map
-                        Maker</a> can generate
-                    a map of your schedule of off Powerschool data.
-                    Navigate to the "Year Schedule" page of Powerschool. You can find this by going to
-                    your IMSA PowerSchool, scrolling down to the bottom left, and clicking on the "Year Schedule".
-                    Alternatively, click <a style="padding-right:0px" target="_blank" rel="noopener noreferrer"
-                        href="https://imsa.powerschool.com/guardian/yearsched.html">here</a> after
-                    logging into Powerschool and it will take you to the page.
-                    Once at the "Year Schedule" page, copy <b>BOTH</b> the first and second semester parts entirely.
-
-                    <b>Please make sure you copy the "Y25-26" (or whatever year) header also! If you are getting errors
-                        double check that your schedule looks similar to the one below + in the image!</b>
-
-                    Then paste
-                    this into the schedule text box. Then, choose which day you want to render, along with any other
-                    settings,
-                    like semester, entrance location, exit location, or whether you want the path to stop by Lexington
-                    after 4th
-                    mod. Press <b>SUBMIT</b> when you are ready, and wait for the path to render. Here is an example
-                    of the
-                    text you will need to copy and paste in. You can paste this in if you want as an example to the
-                    website in
-                    action.
-                    <pre style="font-size: small">
-Y24-25 Semester 1
-Exp    Trm    Crs-Sec    Course Name    Teacher    Room    Enroll    Leave
-2(A,C-D)    S1    ENG201b-1    Literary Explorations III: British    Townsend, Tracy A    A113    08/19/2024    01/19/2025
-4(A-D)    S1    FAR110-1    Wind Ensemble    McCarthy, Mary Beth C    D107    08/19/2024    01/19/2025
-5(A-B,D)    S1    HSS201b-3    Conflict in World History    Eysturlid, Lee    A147    08/19/2024    01/19/2025
-6(A-D)    S1    WLG250-101    Spanish V    Kaluza, Marta J    A131    08/19/2024    01/19/2025
-7(A-D)    S1    MAT473-2    Linear Algebra    Brummet, Evan    A135    08/19/2024    01/19/2025
-8(A-D)    S1    MAT474-1    Abstract Algebra    Fogel, Micah    A155    08/19/2024    01/19/2025
-Y24-25 Semester 2
-Exp    Trm    Crs-Sec    Course Name    Teacher    Room    Enroll    Leave
-2(A,C-D)    S1    ENG201b-1    Literary Explorations III: British    Townsend, Tracy A    A113    08/19/2024    01/19/2025
-4(A-D)    S1    FAR110-1    Wind Ensemble    McCarthy, Mary Beth C    D107    08/19/2024    01/19/2025
-5(A-B,D)    S1    HSS201b-3    Conflict in World History    Eysturlid, Lee    A147    08/19/2024    01/19/2025
-6(A-D)    S1    WLG250-101    Spanish V    Kaluza, Marta J    A131    08/19/2024    01/19/2025
-7(A-D)    S1    MAT473-2    Linear Algebra    Brummet, Evan    A135    08/19/2024    01/19/2025
-8(A-D)    S1    MAT474-1    Abstract Algebra    Fogel, Micah    A155    08/19/2024    01/19/2025
-
-        </pre>
-                    <p style="font-size: smaller; text-align: center;">A screenshot of the area needed to be copied.
-                        Make sure you copy EVERYTHING in here.</p>
-                    <img src="assets/about/schedule.png" alt="This is the schedule"
-                        style="max-width: 100%; height: auto; display: block;">
-                </div>
-            </details>
-            <details>
-                <summary>How to Use Direct Path Finder</summary>
-                <div style="font-size: medium;">
-                    The <a style="padding-right:0px" target="_blank" rel="noopener noreferrer" href="/path">Direct Path
-                        Finder</a> can be used to find the quickest path from one classroom/area to another. Input the
-                    room number of the start and destination rooms and click submit, and the fastest path will be
-                    calculated and displayed.
-                </div>
-            </details>
-            <details>
-                <summary>License</summary>
-                <div style="font-size: medium;">This code and project, and associated files, are licensed under the <a
-                        style="padding-right:0px" target="_blank" rel="noopener noreferrer"
-                        href="https://opensource.org/license/mit">MIT
-                        License</a>. A copy of the license can be found in the github repository, or online at the prior
-                    link.
-                </div>
-            </details>
-            <details>
-                <summary>
-                    Troubleshooting
-                </summary>
-                <div style="font-size: medium;">
-                    If you are having any issues with the Schedule Map Maker, then please first try to re-copy the
-                    Powerschool schedule in. The most common errors are caused by people accidentally not copying parts
-                    of the schedule. The error message at the bottom can sometimes help give information as to what went
-                    wrong. Additionally, try refreshing the page or clearing your browser's cache. If nothing is
-                    working, then please file an Issue on the GitHub repository, linked at the top of the page.
-                </div>
-            </details>
-            <details>
-                <summary>
-                    What are those "George's Schedule Machine" and "Add/Drop Calculator" Links?
-                </summary>
-                <div style="font-size: medium;">
-                    <a style="padding-right:0px" target="_blank" rel="noopener noreferrer"
-                        href="https://geosir.github.io/imsa-scheduler/">George's Schedule Machine</a> is another super
-                    helpful website that you can use when figuring out your
-                    schedule. You input your Powerschool schedule similarly, and it will generate a block by block
-                    diagram of your schedule. Go check it out!
-                    The <a rel="noopener noreferrer" href="https://imsa-course-planner.vercel.app/">Add/Drop
-                        Calculator</a> is also a super helpful tool when planning out your Add/Drop. Put in your
-                    Powerschool schedule and input the classes you'd like to take and see the results. Also go check it
-                    out!
-
-                </div>
-            </details>
-            <details>
-                <summary>
-                    There's an Error/Something's Buggy or Broken
-                </summary>
-                <div style="font-size: medium;">
-                    If there's something messed up, please fill out an issue on the GitHub!</div>
-            </details>
-        </div>
-
-
-
-
-        <div style="display: flex; justify-content: center;">
-            <div style="display: flex; align-items: center; gap: 20px; overflow: hidden; position: fixed; bottom: 0;">
-        <p>
-
-
-          <a href="/">Schedule Finder ></a>
-          <a rel="noopener noreferrer" href="/about">About Page ></a>
-          <a rel="noopener noreferrer" href="/path">Direct Path ></a>
-          <a rel="noopener noreferrer" href="/room">Room Find Page ></a>
-          <a rel="noopener noreferrer" href="https://geosir.github.io/imsa-scheduler/">George's
-            Schedule Machine >></a>
-        </p>
-            </div>
-        </div>
+<body class="schedule-app about-page">
+  <header class="app-topbar">
+    <div class="app-title">
+      <span class="app-name">About Schedule Map Maker</span>
+      <span class="app-status">Browser-only IMSA routing tools</span>
     </div>
+    <nav class="app-nav" aria-label="Site navigation">
+      <a title="Map your full IMSA schedule" href="/">Map your schedule</a>
+      <a title="Find the shortest path between two rooms" rel="noopener noreferrer" href="/path">Room-to-room path</a>
+      <a title="Find one room on the map" rel="noopener noreferrer" href="/room">Find a room</a>
+      <a title="Read about Schedule Map Maker" rel="noopener noreferrer" href="/about">About</a>
+    </nav>
+  </header>
 
+  <main class="about-shell">
+    <section class="about-intro">
+      <div>
+        <p class="panel-kicker">IMSA Navigation</p>
+        <h1>Schedule Map Maker</h1>
+      </div>
+      <a href="https://epochml.org/" target="_blank" rel="noopener noreferrer" class="about-logo-link" title="Open the EPOCH website">
+        <img src="/assets/about/epochLogo.jpg" alt="EPOCH logo">
+      </a>
+    </section>
+
+    <section class="about-grid">
+      <article class="about-card">
+        <h2>Project</h2>
+        <p>
+          This site generates building routes from an IMSA schedule, a direct start-to-destination path, or a single
+          room lookup. It builds on IMSA Code Society's original classroom finder and is maintained as an EPOCH project.
+        </p>
+        <p>
+          Schedule parsing, room lookup, and route generation run in the browser against static assets, so schedule text
+          does not need to be sent to a server.
+        </p>
+      </article>
+
+      <article class="about-card">
+        <h2>Links</h2>
+        <div class="about-link-list">
+          <a target="_blank" rel="noopener noreferrer" title="Open the EPOCH website" href="https://epochml.org/">EPOCH</a>
+          <a target="_blank" rel="noopener noreferrer" title="Open the Schedule Map Maker GitHub repository" href="https://github.com/epochml/schedule-map-maker">Project GitHub</a>
+          <a target="_blank" rel="noopener noreferrer" title="Open the original Classroom Finder repository" href="https://github.com/IMSA-Code-Society/ClassroomFinder">Original Classroom Finder</a>
+          <a target="_blank" rel="noopener noreferrer" title="Open George's Schedule Machine" href="https://geosir.github.io/imsa-scheduler/">George's Schedule Machine</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="about-details">
+      <details open>
+        <summary title="Show or hide schedule import information">Schedule Import</summary>
+        <div class="about-detail-body">
+          <ol class="about-steps">
+            <li>Open the schedule mapper and use Open PowerSchool to go to the Year Schedule page.</li>
+            <li>Copy both semester sections, including each semester title and the column header row.</li>
+            <li>Paste the copied text into Schedule Text, or use Paste if the schedule is already on your clipboard.</li>
+            <li>Check the validation summary. If a room is flagged, use the suggested correction or report the missing room.</li>
+            <li>Choose the semester, day, entrance, exit, and Lexington stop setting.</li>
+            <li>Press Generate Map. After the map appears, use Fit, zoom, pan, or the route list to inspect paths.</li>
+          </ol>
+          <img src="/assets/about/schedule.png" alt="PowerSchool Year Schedule copy area" class="about-screenshot">
+        </div>
+      </details>
+
+      <details>
+        <summary title="Show or hide bookmarklet instructions">Bookmarklet Import</summary>
+        <div class="about-detail-body">
+          <ol class="about-steps">
+            <li>Open the schedule mapper and press Bookmarklet.</li>
+            <li>Drag Import Schedule Map to your browser bookmarks bar, or use Copy if your browser blocks dragging.</li>
+            <li>Log into PowerSchool and open the Year Schedule page.</li>
+            <li>Click the bookmarklet from your bookmarks bar while you are on the Year Schedule page.</li>
+            <li>The schedule mapper opens with the copied schedule text loaded. Review validation, then generate the map.</li>
+          </ol>
+        </div>
+      </details>
+
+      <details>
+        <summary title="Show or hide direct path finder information">Direct Path Finder</summary>
+        <div class="about-detail-body">
+          <ol class="about-steps">
+            <li>Open Room-to-room path.</li>
+            <li>Type in Start and Destination, then choose matching rooms from the dropdown.</li>
+            <li>Use Swap if the route direction is backwards.</li>
+            <li>Press Find Path. The panel closes and the route is drawn on the map.</li>
+            <li>Use Fit, zoom, pan, Save, favorites, or the shareable URL to reuse the route.</li>
+          </ol>
+        </div>
+      </details>
+
+      <details>
+        <summary title="Show or hide room finder information">Room Finder</summary>
+        <div class="about-detail-body">
+          <ol class="about-steps">
+            <li>Open Find a room.</li>
+            <li>Type a room, entrance, or common alias such as Lexington or Door 13.</li>
+            <li>Choose the matching dropdown entry and press Find Room.</li>
+            <li>The panel closes, the map centers on the room, and the marker label shows the selected location.</li>
+            <li>Use Fit, Save, favorites, or the shareable URL to return to the same room later.</li>
+          </ol>
+        </div>
+      </details>
+
+      <details>
+        <summary title="Show or hide troubleshooting information">Troubleshooting</summary>
+        <div class="about-detail-body">
+          <p>
+            If schedule import fails, re-copy the full Year Schedule and verify both semesters are included. If a room
+            is missing or a path looks wrong, file an issue in the project repository with the room name and page where
+            it happened.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary title="Show or hide map data maintenance tools">Map Data</summary>
+        <div class="about-detail-body">
+          <p>
+            Maintainers can use the internal map data editor to inspect nodes and adjust route data before committing
+            changes.
+          </p>
+          <a class="button compact-button" title="Open the internal map data editor" href="/editor/">Open Map Data Editor</a>
+        </div>
+      </details>
+
+      <details>
+        <summary title="Show or hide license information">License</summary>
+        <div class="about-detail-body">
+          <p>
+            This project is licensed under the MIT License.
+          </p>
+        </div>
+      </details>
+    </section>
+  </main>
 </body>
+
+</html>

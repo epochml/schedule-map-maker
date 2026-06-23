@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favico/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favico/favicon-16x16.png">
   <link rel="manifest" href="/assets/favico/site.webmanifest">
-  <title>Direct Path Finder</title>
+  <title>Room Finder</title>
 
   <meta property="og:title" content="IMSA Schedule Map Maker" />
   <meta property="og:description" content="This website will generate a map of your IMSA schedule to ease navigation" />
@@ -16,54 +16,66 @@
 
 
   <link rel="stylesheet" href="/assets/home.css">
+  <script src="/assets/js/map-engine.js" defer></script>
+  <script src="/assets/js/room-combobox.js" defer></script>
   <script src="/assets/find_room/script.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 </head>
 
-<body>
-  <div style="height: 90%" class="map" id="map">
-    <img id="hallwayImage" class="hallway" src="/image" alt="Hallway Image">
-    <svg id="mySvg" viewBox="0 0 10000 27360"></svg>
+<body class="schedule-app tool-page">
+  <header class="app-topbar">
+    <div class="app-title">
+      <span class="app-name">Room Finder</span>
+      <span id="importStatus" class="app-status">Awaiting room</span>
+    </div>
+    <nav class="app-nav" aria-label="Site navigation">
+      <a title="Map your full IMSA schedule" href="/">Map your schedule</a>
+      <a title="Find the shortest path between two rooms" rel="noopener noreferrer" href="/path">Room-to-room path</a>
+      <a title="Find one room on the map" rel="noopener noreferrer" href="/room">Find a room</a>
+      <a title="Read about Schedule Map Maker" rel="noopener noreferrer" href="/about">About</a>
+    </nav>
+  </header>
+
+  <div class="view-buttons">
+    <button title="Download an image of this room location" id="downloadMapBtn" type="button">Save</button>
+    <button title="Hide the room panel" id="viewTog" type="button">Hide Panel</button>
+    <button title="Fit the selected room in view" id="fitView" type="button">Fit</button>
+    <button title="Zoom in" id="zoomIn" type="button">+</button>
+    <button title="Zoom out" id="zoomOut" type="button">-</button>
   </div>
 
-  <div id="bottom-part" class="input_response">
-
-    <div id="maindiv" style="padding-top: 20px;">
-      <input id="room" type="text" style="color: white" placeholder="Enter Room" class="dark-input">
-
-      <div><button style="font-size: medium; width: 200px;" class="path_button dark-input">
-          Find Room
-        </button></div>
-
-
+  <div class="map" id="map" style="overflow: hidden;">
+    <div id="panzoom-container">
+      <img id="hallwayImage" class="hallway" src="/assets/imsa_hallway.jpg" alt="Hallway Image">
+      <svg id="mySvg"></svg>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="message_box">
-      <p id="message">Awaiting Input.</p>
-    </div>
-    <br>
+  </div>
 
+  <div id="bottom-part" class="workflow-panel tool-panel">
+    <form id="roomForm" class="tool-form">
+      <section class="render-section" aria-label="Room controls">
+        <div class="section-heading">
+          <div>
+            <p class="panel-kicker">Room Lookup</p>
+            <h1>Find Room</h1>
+          </div>
+          <button class="button primary-button path_button" title="Find and center the selected room on the map" type="submit">Find Room</button>
+        </div>
 
-    <div style="display: flex; justify-content: center;">
-      <div style="display: flex; align-items: center; gap: 20px; overflow: hidden; position: fixed; bottom: 0;">
-        <p>
+        <div id="maindiv" class="settings-grid tool-settings single-field">
+          <label class="field-label room-combobox" for="room">Room
+            <span class="field-action-row">
+              <input id="room" title="Type or choose a room or location to find" type="text" placeholder="Choose room or location" autocomplete="off">
+              <button id="favoriteRoom" class="favorite-room-btn" title="Add or remove this room from favorites" type="button" aria-label="Favorite room">Fav</button>
+            </span>
+            <div id="roomMenu" class="room-combobox-list" title="Matching rooms and locations" role="listbox" hidden></div>
+          </label>
+        </div>
 
-
-          <a href="/">Schedule Finder ></a>
-          <a rel="noopener noreferrer" href="/about">About Page ></a>
-          <a rel="noopener noreferrer" href="/path">Direct Path ></a>
-          <a rel="noopener noreferrer" href="/room">Room Find Page ></a>
-          <a rel="noopener noreferrer" href="https://geosir.github.io/imsa-scheduler/">George's
-            Schedule Machine >></a>
-        </p>
-
-      </div>
-    </div>
-
-
+        <p id="message" class="tool-message" role="status">Choose a room or location to center it on the map.</p>
+        <a id="reportIssueLink" class="report-link" title="Report a bad room location on GitHub" target="_blank" rel="noopener noreferrer" hidden>Report map issue</a>
+      </section>
+    </form>
   </div>
 </body>
 

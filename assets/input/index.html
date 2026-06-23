@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule Map Maker</title>
     <link rel="stylesheet" href="/assets/home.css?1234">
-    <script src="/assets/input/script.js" defer></script>
+    <script src="/assets/js/map-engine.js" defer></script>
+    <script src="/assets/input/app.js" defer></script>
     <meta property="og:title" content="IMSA Schedule Map Maker" />
     <meta property="og:description"
         content="This website will generate a map of your IMSA schedule to ease navigation" />
@@ -21,150 +22,145 @@
 </head>
 
 <body>
-    <div class="view-buttons">
-        <button title="Download an image of your schedule map" id="downloadMapBtn">💾</button>
-        <button title="Hide the bottom input panel" id="viewTog">👁️</button>
-        <button title="Zoom in" id="zoomIn">+</button>
-        <button title="Zoom out" id="zoomOut">-</button>
+    <header class="app-topbar">
+        <div class="app-title">
+            <span class="app-name">Schedule Map Maker</span>
+            <span id="importStatus" class="app-status">No schedule loaded</span>
+        </div>
+        <nav class="app-nav" aria-label="Site navigation">
+            <a title="Map your full IMSA schedule" href="/">Map your schedule</a>
+            <a title="Find the shortest path between two rooms" rel="noopener noreferrer" href="/path">Room-to-room path</a>
+            <a title="Find one room on the map" rel="noopener noreferrer" href="/room">Find a room</a>
+            <a title="Read about Schedule Map Maker" rel="noopener noreferrer" href="/about">About</a>
+        </nav>
+    </header>
 
+    <div class="view-buttons">
+        <button title="Download an image of your schedule map" id="downloadMapBtn" type="button">Save</button>
+        <button title="Hide the import panel" id="viewTog" type="button">Hide Panel</button>
+        <button title="Fit the generated schedule routes in view" id="fitView" type="button">Fit</button>
+        <button title="Zoom in" id="zoomIn" type="button">+</button>
+        <button title="Zoom out" id="zoomOut" type="button">-</button>
     </div>
     <div title="Order of your schedule" id="scheduleBox" class="schedule-box"></div>
 
     <div class="map" id="map" style="overflow: hidden;">
         <div id="panzoom-container">
-            <img id="hallwayImage" class="hallway" src="/image" alt="Hallway Image">
+            <img id="hallwayImage" class="hallway" src="/assets/imsa_hallway.jpg" alt="Hallway Image">
             <svg id="mySvg"></svg>
         </div>
     </div>
 
-    <div id="bottom-part">
-        <div style="display: flex; justify-content: center; justify-items: center; align-items: center; align-content: center;">
-            <p>The order of classes is by color. IE, red is 1st, orange 2nd...</p>
-            
-            <select style="margin-left: 40px; height: 40%;"title="Try out an example?" id="exampleSched">
-                <option value="no_ex">No Example</option>
-                <option value="ex1">Example 1</option>
-                <option value="ex2">Example 2</option>
-                <option value="ex3">Example 3</option>
-            </select>
-        </div>
-
-        <textarea
-            title="Input your Powerschool Schedule here. See the About page for help if you don't know where that is."
-            id="scheduleInput" placeholder="Enter schedule... (see the ABOUT page if you need help!) " rows="6%"
-            cols="150%"></textarea>
-        <form id="scheduleForm">
-
-            <br>
-            <div id="maindiv">
-                <label for="daySelector">Choose what to render:</label>
-                <select title="Select which day to render" id="daySelector">
-                    <option value="aday">A Day</option>
-                    <option value="bday">B Day</option>
-                    <option value="cday">C Day</option>
-                    <option value="dday">D Day</option>
-                    <option value="iday">I Day</option>
-                </select>
-                <select title="Select from which semester to render classes" id="semSelector">
-                    <option value="Semester 1">Semester One</option>
-                    <option value="Semester 2">Semester Two</option>
-                </select>
-                <p>Midday @ Lexington?</p><input title="Select whether or not to stop by Lexington." type="checkbox"
-                    id="midday" value="lexington">
-                <p>Enter:</p><select title="Select which entrance to use" id="enterSelector">
-                    <option value="east">East Main</option>
-                    <option value="west">West Main</option>
-
-                    <option value="d13">Door 13</option>
-                    <option value="d6">Door 6</option>
-                </select>
-                <p>Exit:</p><select title="Select which exit to use" id="exitSelector">
-                    <option value="east">East Main</option>
-                    <option value="west">West Main</option>
-
-                    <option value="d13">Door 13</option>
-                    <option value="d6">Door 6</option>
-                </select>
-            </div>
-            <button title="Submit and render your schedule" type="submit" id="submit">Submit</button>
-
-            <br>
-            <br>
-            <div style="display: flex; justify-content: center;">
-                <div
-                    style="display: flex; align-items: center; gap: 20px; overflow: hidden; position: fixed; bottom: 0;">
-        <p>
-
-
-          <a href="/">Schedule Finder ></a>
-          <a rel="noopener noreferrer" href="/about">About Page ></a>
-          <a rel="noopener noreferrer" href="/path">Direct Path ></a>
-          <a rel="noopener noreferrer" href="/room">Room Find Page ></a>
-          <a rel="noopener noreferrer" href="https://geosir.github.io/imsa-scheduler/">George's
-            Schedule Machine >></a>
-        </p>
+    <div id="bottom-part" class="workflow-panel">
+        <form id="scheduleForm" class="schedule-form">
+            <section class="import-section" aria-labelledby="importHeading">
+                <div class="section-heading">
+                    <div>
+                        <p class="panel-kicker">PowerSchool Year Schedule</p>
+                        <h1 id="importHeading">Import Schedule</h1>
+                    </div>
+                    <div class="import-actions">
+                        <a id="powerSchoolBtn" class="button primary-button" target="_blank" rel="noopener noreferrer"
+                            title="Open the PowerSchool Year Schedule page"
+                            href="https://imsa.powerschool.com/guardian/yearsched.html">Open PowerSchool</a>
+                        <button id="pasteClipboardBtn" class="button" title="Paste schedule text from your clipboard" type="button">Paste</button>
+                        <button id="toggleBookmarkletBtn" class="button" title="Show or hide the PowerSchool import bookmarklet" type="button">Bookmarklet</button>
+                    </div>
                 </div>
-            </div>
 
-            <p id="error_message" ;></p>
-            <br>
+                <div id="bookmarkletCard" class="bookmarklet-card" hidden>
+                    <a id="bookmarkletInstallLink" class="bookmarklet-link" title="Drag this bookmarklet to your bookmarks bar" href="#">Import Schedule Map</a>
+                    <button id="copyBookmarkletBtn" class="button compact-button" title="Copy the bookmarklet JavaScript link" type="button">Copy</button>
+                    <p>Drag the import link to the bookmarks bar, then click it from the PowerSchool Year Schedule page.</p>
+                </div>
 
+                <label class="field-label" for="scheduleInput">Schedule Text</label>
+                <textarea id="scheduleInput" title="Paste the copied PowerSchool Year Schedule text here" placeholder="Paste the copied Year Schedule here" rows="7"></textarea>
+                <div id="scheduleDiagnostics" class="schedule-diagnostics" hidden></div>
 
+                <div class="inline-actions">
+                    <select title="Load one of the built-in example schedules" id="exampleSched">
+                        <option value="no_ex">Examples</option>
+                        <option value="ex1">Example 1</option>
+                        <option value="ex2">Example 2</option>
+                        <option value="ex3">Example 3</option>
+                    </select>
+                    <button id="clearScheduleBtn" class="button compact-button" title="Clear the schedule text field" type="button">Clear</button>
+                </div>
+
+                <div id="parsePreview" class="parse-preview" aria-live="polite"></div>
+            </section>
+
+            <section class="render-section" aria-label="Render controls">
+                <div class="selector-row">
+                    <div class="selector-cluster">
+                        <span class="field-label">Semester</span>
+                        <div id="semTabs" class="tab-group" role="tablist" aria-label="Semester">
+                            <button class="tab-button active" title="Render Semester 1 classes" type="button" data-value="Semester 1">Semester 1</button>
+                            <button class="tab-button" title="Render Semester 2 classes" type="button" data-value="Semester 2">Semester 2</button>
+                        </div>
+                        <select title="Select from which semester to render classes" id="semSelector"
+                            class="visually-hidden" tabindex="-1">
+                            <option value="Semester 1">Semester One</option>
+                            <option value="Semester 2">Semester Two</option>
+                        </select>
+                    </div>
+
+                    <div class="selector-cluster">
+                        <span class="field-label">Day</span>
+                        <div id="dayTabs" class="tab-group" role="tablist" aria-label="Day">
+                            <button class="tab-button active" title="Render A Day routes" type="button" data-value="aday">A</button>
+                            <button class="tab-button" title="Render B Day routes" type="button" data-value="bday">B</button>
+                            <button class="tab-button" title="Render C Day routes" type="button" data-value="cday">C</button>
+                            <button class="tab-button" title="Render D Day routes" type="button" data-value="dday">D</button>
+                            <button class="tab-button" title="Render I Day routes" type="button" data-value="iday">I</button>
+                        </div>
+                        <select title="Select which day to render" id="daySelector" class="visually-hidden" tabindex="-1">
+                            <option value="aday">A Day</option>
+                            <option value="bday">B Day</option>
+                            <option value="cday">C Day</option>
+                            <option value="dday">D Day</option>
+                            <option value="iday">I Day</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="maindiv" class="settings-grid schedule-settings">
+                    <label class="field-label" for="enterSelector">Enter
+                        <select title="Select which entrance to use" id="enterSelector">
+                            <option value="east">East Main</option>
+                            <option value="west">West Main</option>
+                            <option value="d13">Door 13</option>
+                            <option value="d6">Door 6</option>
+                        </select>
+                    </label>
+                    <label class="field-label" for="exitSelector">Exit
+                        <select title="Select which exit to use" id="exitSelector">
+                            <option value="east">East Main</option>
+                            <option value="west">West Main</option>
+                            <option value="d13">Door 13</option>
+                            <option value="d6">Door 6</option>
+                        </select>
+                    </label>
+                    <label class="field-label checkbox-field" for="midday" title="Route through Lexington around midday">
+                        <input title="Select whether or not to stop by Lexington." type="checkbox" id="midday"
+                            value="lexington">
+                        Midday at Lexington
+                    </label>
+                    <div class="settings-action">
+                        <button title="Generate or update the schedule map with the current settings" type="submit" id="submit" disabled>Generate
+                            Map</button>
+                    </div>
+                </div>
+
+                <div class="submit-row">
+                    <p id="error_message" role="alert"></p>
+                </div>
+            </section>
         </form>
     </div>
-    <script>
 
-        window.addEventListener("load", () => {
-            const map = document.getElementById("map");
-            const scrollHeight = map.scrollHeight - map.clientHeight;
-            map.scrollTop = scrollHeight * 0.15;
-        });
-
-
-
-        function saveToStorage(id, value) {
-            localStorage.setItem(id, value);
-        }
-
-        function loadFromStorage(id) {
-            return localStorage.getItem(id);
-        }
-
-
-        const elementsToPersist = [
-            "scheduleInput",
-            "daySelector",
-            "semSelector",
-            "enterSelector",
-            "exitSelector"
-        ];
-
-
-        window.addEventListener("DOMContentLoaded", () => {
-            elementsToPersist.forEach(id => {
-                const el = document.getElementById(id);
-                const saved = loadFromStorage(id);
-                if (saved !== null) {
-                    el.value = saved;
-                }
-
-                el.addEventListener("input", () => saveToStorage(id, el.value));
-                el.addEventListener("change", () => saveToStorage(id, el.value)); // for <select>
-            });
-
-
-            const checkbox = document.getElementById("midday");
-            const savedCheck = loadFromStorage("midday");
-            if (savedCheck !== null) {
-                checkbox.checked = savedCheck === "true";
-            }
-            checkbox.addEventListener("change", () => {
-                saveToStorage("midday", checkbox.checked);
-            });
-        });
-    </script>
-
-
+    <button id="panelPeek" class="panel-peek" title="Move here or click to show the import panel" type="button" aria-label="Show import panel">↑</button>
 
     <div id="tooltip" class="tooltip"></div>
 </body>
