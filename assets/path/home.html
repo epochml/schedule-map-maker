@@ -2,23 +2,23 @@
 <html>
 
 <head>
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favico/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favico/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favico/favicon-16x16.png">
-  <link rel="manifest" href="/assets/favico/site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favico/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favico/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/favico/favicon-16x16.png">
+  <link rel="manifest" href="../assets/favico/site.webmanifest">
   <title>Direct Path Finder</title>
 
   <meta property="og:title" content="IMSA Schedule Map Maker" />
   <meta property="og:description" content="This website will generate a map of your IMSA schedule to ease navigation" />
-  <meta property="og:image" content="https://schedule-map-maker.epochml.org/assets/about/epochLogo.jpg" />
-  <meta property="og:url" content="https://schedule-map-maker.epochml.org/" />
+  <meta property="og:image" content="https://1337isnot1337.github.io/schedule-map-maker/assets/about/epochLogo.jpg" />
+  <meta property="og:url" content="https://1337isnot1337.github.io/schedule-map-maker/" />
   <meta property="og:type" content="website" />
 
 
-  <link rel="stylesheet" href="/assets/home.css">
-  <script src="/assets/js/map-engine.js" defer></script>
-  <script src="/assets/js/room-combobox.js" defer></script>
-  <script src="/assets/path/script.js" defer></script>
+  <link rel="stylesheet" href="../assets/home.css">
+  <script src="../assets/js/map-engine.js" defer></script>
+  <script src="../assets/js/room-combobox.js" defer></script>
+  <script src="../assets/path/script.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 </head>
 
@@ -29,10 +29,10 @@
       <span id="importStatus" class="app-status">Awaiting route</span>
     </div>
     <nav class="app-nav" aria-label="Site navigation">
-      <a title="Map your full IMSA schedule" href="/">Map your schedule</a>
-      <a title="Find the shortest path between two rooms" rel="noopener noreferrer" href="/path">Room-to-room path</a>
-      <a title="Find one room on the map" rel="noopener noreferrer" href="/room">Find a room</a>
-      <a title="Read about Schedule Map Maker" rel="noopener noreferrer" href="/about">About</a>
+      <a title="Map your full IMSA schedule" href="../">Map your schedule</a>
+      <a title="Find the shortest path between two rooms" rel="noopener noreferrer" href="../path/">Room-to-room path</a>
+      <a title="Find one room on the map" rel="noopener noreferrer" href="../room/">Find a room</a>
+      <a title="Read about Schedule Map Maker" rel="noopener noreferrer" href="../about/">About</a>
     </nav>
   </header>
 
@@ -46,7 +46,7 @@
 
   <div class="map" id="map" style="overflow: hidden;">
     <div id="panzoom-container">
-      <img id="hallwayImage" class="hallway" src="/assets/imsa_hallway.jpg" alt="Hallway Image">
+      <img id="hallwayImage" class="hallway" src="../assets/imsa_hallway.jpg" alt="Hallway Image">
       <svg id="mySvg"></svg>
     </div>
   </div>

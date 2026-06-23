@@ -1,3 +1,9 @@
+const EDITOR_ASSET_BASE =
+  typeof document !== "undefined" && document.currentScript?.src
+    ? new URL("../", document.currentScript.src).href
+    : "../assets/";
+const NODES_URL = new URL("nodes.json", EDITOR_ASSET_BASE).href;
+
 document.addEventListener('DOMContentLoaded', () => {
 
   const svg = document.getElementById("mySvg");
@@ -5,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let nodes_array = [];
   let id_increment = 0;
-  fetch("/assets/nodes.json")
+  fetch(NODES_URL)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -140,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function visualize_nodes() {
-    fetch("/assets/nodes.json")
+    fetch(NODES_URL)
       .then(response => response.json())
       .then(data => {
         adjustSvgSize()
@@ -197,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const id1 = parseInt(document.getElementById("node1").value);
     const id2 = parseInt(document.getElementById("node2").value);
 
-    fetch("/assets/nodes.json")
+    fetch(NODES_URL)
       .then(response => response.json())
       .then(data => {
         const node1 = data.find(node => node.id === id1);

@@ -11,6 +11,25 @@ npm run serve
 
 Then open `http://localhost:8000`.
 
+## GitHub Pages Deployment
+
+This app is configured to run as a project site at:
+
+```text
+https://1337isnot1337.github.io/schedule-map-maker/
+```
+
+The included `.github/workflows/pages.yml` workflow builds `dist/` and deploys
+it to GitHub Pages on every push to `main`.
+
+```bash
+npm test
+npm run build
+```
+
+On GitHub, open the repository settings, go to **Pages**, set **Source** to
+**GitHub Actions**, and push to `main`.
+
 ## Tests
 
 ```bash

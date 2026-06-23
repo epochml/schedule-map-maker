@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const json = await window.ScheduleMapEngine.generateSchedule(scheduleInput, enter, exit, isChecked);
                 console.log("Here is the json recieved: ", json);
                 if (json.status == 1) {
-                    document.getElementById('error_message').innerHTML = `There was an error: ${json.error_message}. Hint: checking the <a id="error_message_link" href="/about">About Page</a> might help you`;
+                    document.getElementById('error_message').innerHTML = `There was an error: ${json.error_message}. Hint: checking the <a id="error_message_link" href="https://1337isnot1337.github.io/schedule-map-maker/about/">About Page</a> might help you`;
                     return;
                 }
 
@@ -570,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 //this seems to be confusing ppl, will be removing for now.
                 //if added in future use toggleMinimize() to do it also
         } catch (err) {
-            document.getElementById('error_message').innerHTML = `There was an error: ${err.message}. Hint: checking the <a id="error_message_link" href="/about">About Page</a> might help you`;
+            document.getElementById('error_message').innerHTML = `There was an error: ${err.message}. Hint: checking the <a id="error_message_link" href="https://1337isnot1337.github.io/schedule-map-maker/about/">About Page</a> might help you`;
         }
 
     }

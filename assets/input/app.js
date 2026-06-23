@@ -1,3 +1,12 @@
+const SCHEDULE_APP_SCRIPT_URL =
+  typeof document !== "undefined" && document.currentScript?.src ? document.currentScript.src : "";
+const SCHEDULE_APP_ROOT_URL = SCHEDULE_APP_SCRIPT_URL
+  ? new URL("../../", SCHEDULE_APP_SCRIPT_URL).href
+  : "/";
+const SCHEDULE_APP_INPUT_ASSET_URL = SCHEDULE_APP_SCRIPT_URL
+  ? new URL("./", SCHEDULE_APP_SCRIPT_URL).href
+  : "/assets/input/";
+
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("schedule-app");
 
@@ -759,7 +768,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadLegacyExample(key) {
     if (legacyExamples[key]) return legacyExamples[key];
-    const response = await fetch("/assets/input/script.js", { cache: "force-cache" });
+    const response = await fetch(new URL("script.js", SCHEDULE_APP_INPUT_ASSET_URL).href, {
+      cache: "force-cache",
+    });
     if (!response.ok) throw new Error("Could not load examples.");
     const source = await response.text();
     const match = source.match(new RegExp(`const ${key} = \`([\\s\\S]*?)\``));
@@ -774,7 +785,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function buildBookmarkletHref() {
-    const target = new URL("/", window.location.href).href;
+    const target = SCHEDULE_APP_ROOT_URL;
     const origin = new URL(target).origin;
     const source = `(function(){var target=${JSON.stringify(target)};var origin=${JSON.stringify(origin)};function clean(value){return String(value||"").replace(/\\u00a0/g," ").replace(/[ \\t]+/g," ").trim()}function rowText(row){return Array.prototype.slice.call(row.cells||[]).map(function(cell){return clean(cell.innerText||cell.textContent)}).filter(Boolean).join("\\t")}function looksLike(line){return /Semester\\s+[12]/i.test(line)||/^Exp\\s+Trm\\s+Crs-Sec/i.test(line)||/^[A-Za-z0-9-]+\\([^)]+\\)\\s+/.test(line)}function hasSemester(line,n){return new RegExp("Semester\\\\s+"+n,"i").test(line)}var tableLines=Array.prototype.slice.call(document.querySelectorAll("tr")).map(rowText).filter(looksLike);var bodyLines=((document.body&&document.body.innerText)||"").split(/\\r?\\n/).map(clean).filter(looksLike);var lines=tableLines.length>=bodyLines.length?tableLines:bodyLines;if(tableLines.length){var joined=lines.join("\\n");var semesterLines=bodyLines.filter(function(line){return /Semester\\s+[12]/i.test(line)});if(!hasSemester(joined,1)&&semesterLines[0])lines.unshift(semesterLines[0]);if(!hasSemester(joined,2)&&semesterLines[1]){var secondHeader=lines.findIndex(function(line,index){return index>0&&/^Exp\\s+Trm\\s+Crs-Sec/i.test(line)});lines.splice(secondHeader>0?secondHeader:Math.ceil(lines.length/2),0,semesterLines[1])}}if(!lines.length){alert("No PowerSchool schedule rows found.");return}var schedule=lines.join("\\n");var win=window.open(target,"_blank");function send(){if(win&&!win.closed)win.postMessage({type:"schedule-map-import",schedule:schedule},origin)}setTimeout(send,700);setTimeout(send,1600);setTimeout(send,2800);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(schedule).catch(function(){})})();`;
     return `javascript:${source}`;
@@ -1387,7 +1398,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function buildReportUrl(title, body) {
     const params = new URLSearchParams({ title, body });
-    return `https://github.com/epochml/schedule-map-maker/issues/new?${params.toString()}`;
+    return `https://github.com/1337isnot1337/schedule-map-maker/issues/new?${params.toString()}`;
   }
 
   function appendHighlightedLine(container, line, issues) {

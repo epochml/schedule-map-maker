@@ -2,11 +2,12 @@
   const RECENTS_KEY = "roomPicker:recentRooms";
   const FAVORITES_KEY = "roomPicker:favoriteRooms";
   const MAX_RECENTS = 8;
+  const ASSET_BASE = resolveAssetBase();
   let roomNamesPromise = null;
 
   async function loadRoomNames() {
     if (roomNamesPromise) return roomNamesPromise;
-    roomNamesPromise = fetch("/assets/nodes.json", { cache: "force-cache" })
+    roomNamesPromise = fetch(new URL("nodes.json", ASSET_BASE).href, { cache: "force-cache" })
       .then((response) => {
         if (!response.ok) throw new Error(`Could not load rooms: ${response.status}`);
         return response.json();
@@ -17,6 +18,13 @@
         )
       );
     return roomNamesPromise;
+  }
+
+  function resolveAssetBase() {
+    if (typeof document !== "undefined" && document.currentScript?.src) {
+      return new URL("../", document.currentScript.src).href;
+    }
+    return "/assets/";
   }
 
   function attach(input, menu, names, onSelect, options = {}) {

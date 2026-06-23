@@ -7,7 +7,7 @@
     root.ScheduleMapEngine = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const DEFAULT_ASSET_BASE = "/assets/";
+  const DEFAULT_ASSET_BASE = resolveDefaultAssetBase();
   const ROUTE_CACHE_MISSING = 65535;
   const LEXINGTON_ID = 354;
   const ENTRANCE_IDS = {
@@ -47,6 +47,13 @@
   let assetBase = DEFAULT_ASSET_BASE;
   let state = null;
   let statePromise = null;
+
+  function resolveDefaultAssetBase() {
+    if (typeof document !== "undefined" && document.currentScript?.src) {
+      return new URL("../", document.currentScript.src).href;
+    }
+    return "/assets/";
+  }
 
   function configure(options = {}) {
     if (options.assetBase) {
