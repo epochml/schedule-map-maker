@@ -288,19 +288,31 @@ textarea {
   left: 10px;
   background-color: #1E1E24;
   color: #EEF0F2;
-  padding: 12px 16px;
+  padding: 0;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   font-family: 'Open Sans', 'Roboto', sans-serif;
-  max-width: 250px;
+  width: max-content;
+  min-width: 210px;
+  max-width: min(380px, calc(100vw - 20px));
+  box-sizing: border-box;
   z-index: 9999;
   font-size: 14px;
+  overflow: visible;
 }
 
 .schedule-box:empty {
   display: none;
 }
 
+.schedule-legend-scroll {
+  max-height: min(34vh, 260px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 12px 44px 14px 16px;
+  border-radius: inherit;
+  box-sizing: border-box;
+}
 
 .schedule-line {
   display: flex;
@@ -309,7 +321,9 @@ textarea {
 }
 
 .schedule-route-button {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
+  max-width: calc(min(380px, calc(100vw - 20px)) - 60px);
   border: 0;
   border-radius: 6px;
   background: transparent;
@@ -331,7 +345,9 @@ textarea {
 }
 
 .schedule-clear-focus {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
+  max-width: calc(min(380px, calc(100vw - 20px)) - 60px);
   min-height: 28px;
   margin-bottom: 8px;
   border: 1px solid #3A3A42;
@@ -357,6 +373,85 @@ textarea {
   border: 1px solid #1E1E24;
 }
 
+.legend-visibility-toggle {
+  width: 32px;
+  height: 30px;
+  min-width: 32px;
+  min-height: 30px;
+  border: 1px solid #3A3A42;
+  border-radius: 8px;
+  background: #24242A;
+  color: #EEF0F2;
+  cursor: pointer;
+}
+
+.legend-hide-toggle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+}
+
+.legend-show-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.legend-visibility-toggle:hover,
+.legend-visibility-toggle:focus {
+  border-color: #00ADBF;
+  background: #00ADBF;
+  color: #101316;
+}
+
+.legend-eye {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 12px;
+  margin: 0 auto;
+  border: 2px solid currentColor;
+  border-radius: 50% / 60%;
+  box-sizing: border-box;
+}
+
+.legend-eye::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.legend-hide-toggle .legend-eye::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 4px;
+  width: 22px;
+  height: 2px;
+  transform: rotate(-38deg);
+  transform-origin: center;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.schedule-box.legend-hidden {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
 .input_controls {
   display: flex;
   justify-content: center;
@@ -368,12 +463,12 @@ textarea {
 
 .app-topbar {
   width: 100%;
-  min-height: 52px;
+  min-height: 44px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 8px 18px;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 6px 18px;
   box-sizing: border-box;
   background: #151519;
   border-bottom: 1px solid #2E2E34;
@@ -385,6 +480,7 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  max-width: 220px;
 }
 
 .app-name {
@@ -396,12 +492,16 @@ textarea {
   color: #9DBBAE;
   font-size: 13px;
   position: absolute;
-  left: 50%;
+  left: auto;
+  right: 18px;
   top: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  max-width: 220px;
+  transform: translateY(-50%);
+  text-align: right;
   white-space: nowrap;
   pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .app-status[data-state="ready"] {
@@ -420,9 +520,14 @@ textarea {
   display: flex;
   gap: 12px;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   font-size: 13px;
-  margin-left: auto;
+  margin: 0 auto;
+  max-width: calc(100% - 480px);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .workflow-panel {
@@ -438,8 +543,8 @@ textarea {
   right: 0;
   bottom: 0;
   z-index: 12000;
-  transform: translateY(0);
-  transition: transform 0.22s ease;
+  transform: none;
+  transition: bottom 0.22s ease;
 }
 
 .schedule-form {
@@ -1007,7 +1112,7 @@ body.schedule-app .map {
 }
 
 body.schedule-app .view-buttons {
-  top: 62px;
+  top: 54px;
 }
 
 body.schedule-app #downloadMapBtn,
@@ -1017,20 +1122,23 @@ body.schedule-app #zoomIn,
 body.schedule-app #zoomOut {
   width: auto;
   min-width: 42px;
-  height: 38px;
+  height: 30px;
   border-radius: 8px;
-  padding: 0 12px;
-  font-size: 13px;
+  padding: 0 10px;
+  font-size: 11px;
   font-weight: 700;
 }
 
 body.schedule-app .schedule-box {
-  top: 62px;
+  top: 54px;
   border-radius: 8px;
 }
 
 body.schedule-app.panel-closed .workflow-panel {
-  transform: translateY(calc(100% - 10px));
+  bottom: calc(10px - var(--panel-height));
+  background: transparent;
+  border-top-color: transparent;
+  transform: none;
 }
 
 body.schedule-app.panel-closed .workflow-panel::before {
@@ -1047,6 +1155,7 @@ body.schedule-app.panel-closed .workflow-panel::before {
 
 body.schedule-app.panel-closed .workflow-panel > * {
   pointer-events: none;
+  visibility: hidden;
 }
 
 body.schedule-app.panel-closed .map {
@@ -1521,5 +1630,366 @@ details {
 
   .map {
     height: 55vh;
+  }
+}
+
+/* Mobile layout pass for the app shell, toolbar, map, legend, and panels. */
+body.schedule-app {
+  --top-ui-height: 52px;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.schedule-app .map {
+  height: calc(100dvh - var(--top-ui-height) - var(--panel-height));
+}
+
+body.schedule-app.panel-closed .map {
+  height: calc(100dvh - var(--top-ui-height));
+}
+
+.schedule-route-button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+}
+
+.schedule-route-button .schedule-pill {
+  margin-right: 0;
+}
+
+.schedule-route-button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 900px) {
+  body.schedule-app {
+    --top-ui-height: 106px;
+    --panel-height: clamp(300px, 48dvh, 430px);
+  }
+
+  body.schedule-app.tool-page {
+    --panel-height: clamp(220px, 34dvh, 320px);
+  }
+
+  body.schedule-app .app-topbar {
+    min-height: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 7px 10px 5px;
+  }
+
+  body.schedule-app .app-title {
+    min-width: 0;
+    width: calc(100% - 128px);
+    max-width: none;
+  }
+
+  body.schedule-app .app-name {
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  body.schedule-app .app-status {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    top: 8px;
+    max-width: 120px;
+    transform: none;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  body.schedule-app .app-nav {
+    width: 100%;
+    margin-left: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 14px;
+    justify-content: center;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-bottom: 2px;
+    white-space: nowrap;
+    scrollbar-width: none;
+    position: static;
+    max-width: none;
+    transform: none;
+  }
+
+  body.schedule-app .app-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.schedule-app .app-nav a {
+    flex: 0 0 auto;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  body.schedule-app .view-buttons {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(50px, 0.9fr) minmax(78px, 1.35fr) minmax(48px, 0.8fr) minmax(40px, 0.65fr) minmax(40px, 0.65fr);
+    gap: 5px;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    background: #151519;
+    border-bottom: 1px solid #2E2E34;
+    z-index: 30;
+  }
+
+  body.schedule-app #downloadMapBtn,
+  body.schedule-app #viewTog,
+  body.schedule-app #fitView,
+  body.schedule-app #zoomIn,
+  body.schedule-app #zoomOut {
+    width: 100%;
+    min-width: 0;
+    min-height: 27px;
+    height: 27px;
+    border-radius: 8px;
+    padding: 0 5px;
+    font-size: 10.5px;
+    line-height: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  body.schedule-app .map {
+    min-height: 0;
+    height: calc(100dvh - var(--top-ui-height) - var(--panel-height));
+  }
+
+  body.schedule-app.panel-closed .map {
+    height: calc(100dvh - var(--top-ui-height));
+  }
+
+  body.schedule-app .schedule-box {
+    top: calc(var(--top-ui-height) + 8px);
+    left: 10px;
+    right: auto;
+    width: max-content;
+    min-width: 188px;
+    max-width: min(310px, calc(100vw - 28px));
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  body.schedule-app .schedule-legend-scroll {
+    max-height: min(32dvh, 220px);
+    padding: 8px 40px 12px 8px;
+  }
+
+  body.schedule-app .schedule-box.legend-hidden {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+  }
+
+  body.schedule-app .schedule-route-button,
+  body.schedule-app .schedule-clear-focus {
+    max-width: calc(min(310px, calc(100vw - 28px)) - 50px);
+  }
+
+  body.schedule-app .schedule-line {
+    margin-bottom: 4px;
+  }
+
+  body.schedule-app .schedule-clear-focus {
+    min-height: 34px;
+  }
+
+  body.schedule-app .workflow-panel {
+    padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+
+  body.schedule-app .schedule-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  body.schedule-app .section-heading {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  body.schedule-app .section-heading h1 {
+    font-size: 19px;
+    line-height: 1.15;
+  }
+
+  body.schedule-app .panel-kicker,
+  body.schedule-app .field-label {
+    font-size: 11px;
+  }
+
+  body.schedule-app .button,
+  body.schedule-app #submit,
+  body.schedule-app .path_button,
+  body.schedule-app .favorite-room-btn,
+  body.schedule-app .swap-route-btn,
+  body.schedule-app .tab-button {
+    min-height: 38px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
+  body.schedule-app .import-actions,
+  body.schedule-app .inline-actions,
+  body.schedule-app .submit-row {
+    gap: 8px;
+  }
+
+  body.schedule-app .workflow-panel textarea {
+    min-height: 92px;
+    max-height: 140px;
+    margin-bottom: 8px;
+  }
+
+  body.schedule-app .parse-preview {
+    min-height: 0;
+  }
+
+  body.schedule-app .selector-row,
+  body.schedule-app .preview-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  body.schedule-app .selector-cluster {
+    margin-bottom: 10px;
+  }
+
+  body.schedule-app .tab-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    gap: 6px;
+  }
+
+  body.schedule-app .tab-button {
+    min-width: 0;
+    padding: 0 8px;
+  }
+
+  body.schedule-app .schedule-settings#maindiv {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body.schedule-app .tool-settings#maindiv,
+  body.schedule-app .path-settings#maindiv,
+  body.schedule-app .tool-settings.single-field#maindiv {
+    grid-template-columns: 1fr;
+  }
+
+  body.schedule-app .checkbox-field,
+  body.schedule-app .settings-action {
+    grid-column: 1 / -1;
+  }
+
+  body.schedule-app .settings-action #submit {
+    width: 100%;
+    margin: 0;
+  }
+
+  body.schedule-app .bookmarklet-card {
+    margin: 6px 0 8px;
+    padding: 8px;
+  }
+
+  body.schedule-app.panel-closed .workflow-panel {
+    bottom: calc(14px - var(--panel-height));
+    transform: none;
+  }
+
+  body.schedule-app .panel-peek {
+    bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  body.schedule-app {
+    --top-ui-height: 104px;
+    --panel-height: clamp(300px, 48dvh, 370px);
+  }
+
+  body.schedule-app.tool-page {
+    --panel-height: clamp(220px, 34dvh, 286px);
+  }
+
+  body.schedule-app .app-nav {
+    gap: 11px;
+  }
+
+  body.schedule-app .app-nav a {
+    font-size: 11px;
+  }
+
+  body.schedule-app .view-buttons {
+    grid-template-columns: minmax(48px, 0.9fr) minmax(74px, 1.35fr) minmax(44px, 0.8fr) minmax(38px, 0.6fr) minmax(38px, 0.6fr);
+    gap: 4px;
+    padding: 4px 7px;
+  }
+
+  body.schedule-app #downloadMapBtn,
+  body.schedule-app #viewTog,
+  body.schedule-app #fitView,
+  body.schedule-app #zoomIn,
+  body.schedule-app #zoomOut {
+    min-height: 26px;
+    height: 26px;
+    padding: 0 5px;
+    font-size: 10px;
+  }
+
+  body.schedule-app .schedule-box {
+    min-width: 184px;
+    max-width: min(286px, calc(100vw - 24px));
+    max-height: min(34dvh, 196px);
+    font-size: 11px;
+  }
+
+  body.schedule-app .schedule-route-button,
+  body.schedule-app .schedule-clear-focus {
+    max-width: calc(min(286px, calc(100vw - 24px)) - 50px);
+  }
+
+  body.schedule-app .section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body.schedule-app .import-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.schedule-app #powerSchoolBtn {
+    grid-column: 1 / -1;
+  }
+
+  body.schedule-app .workflow-panel {
+    padding: 9px 10px calc(11px + env(safe-area-inset-bottom));
   }
 }

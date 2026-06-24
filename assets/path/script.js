@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("resize", () => {
       adjustSvgSize();
       if (lastPath.length) drawPath(lastPath, false);
+      updatePanelTransform(!document.body.classList.contains("panel-closed"));
     });
     window.addEventListener("mousemove", (event) => {
       if (!document.body.classList.contains("panel-closed")) return;
@@ -491,8 +492,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setPanelVisible(visible) {
     document.body.classList.toggle("panel-closed", !visible);
+    updatePanelTransform(visible);
     els.viewTog.textContent = visible ? "Hide Panel" : "Show Panel";
     els.viewTog.title = visible ? "Hide the route panel" : "Show the route panel";
+  }
+
+  function updatePanelTransform(visible) {
+    if (visible) {
+      els.bottomPart.style.transform = "";
+      els.bottomPart.style.bottom = "";
+      return;
+    }
+    const handleHeight = window.matchMedia("(max-width: 900px)").matches ? 14 : 10;
+    const offset = Math.max(0, els.bottomPart.offsetHeight - handleHeight);
+    els.bottomPart.style.transform = "";
+    els.bottomPart.style.bottom = `-${offset}px`;
   }
 
   function adjustSvgSize() {
