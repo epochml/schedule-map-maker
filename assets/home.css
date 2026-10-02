@@ -484,6 +484,7 @@ textarea {
 }
 
 .app-name {
+  margin: 0;
   font-size: 17px;
   font-weight: 700;
 }
@@ -573,7 +574,8 @@ textarea {
   margin-bottom: 10px;
 }
 
-.section-heading h1 {
+.section-heading h1,
+.section-heading h2 {
   margin: 0;
   font-size: 24px;
   line-height: 1.1;
@@ -1834,7 +1836,8 @@ body.schedule-app.panel-closed .map {
     margin-bottom: 8px;
   }
 
-  body.schedule-app .section-heading h1 {
+  body.schedule-app .section-heading h1,
+  body.schedule-app .section-heading h2 {
     font-size: 19px;
     line-height: 1.15;
   }
